@@ -4,7 +4,7 @@ import (
 	"io"
 	"log"
 	"os"
-	"path/filepath"
+	"path"
 	"time"
 
 	"github.com/jlaffaye/ftp"
@@ -21,7 +21,6 @@ func DownloadFTPDirectory(host, username, password, remoteDir, localDir string) 
 	if err != nil {
 		return err
 	}
-
 	return downloadDir(conn, remoteDir, localDir)
 }
 
@@ -37,9 +36,10 @@ func downloadDir(conn *ftp.ServerConn, remoteDir, localDir string) error {
 	}
 
 	for _, entry := range entries {
-		remotePath := filepath.Join(remoteDir, entry.Name)
-		localPath := filepath.Join(localDir, entry.Name)
+		remotePath := path.Join(remoteDir, entry.Name)
+		localPath := path.Join(localDir, entry.Name)
 
+		log.Printf("Downloading %s to %s", remotePath, localPath)
 		if entry.Type == ftp.EntryTypeFile {
 			err = downloadFile(conn, remotePath, localPath)
 			if err != nil {
@@ -51,6 +51,7 @@ func downloadDir(conn *ftp.ServerConn, remoteDir, localDir string) error {
 				log.Printf("Error downloading directory %s: %v", remotePath, err)
 			}
 		}
+		
 	}
 
 	return nil

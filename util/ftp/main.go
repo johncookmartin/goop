@@ -1,22 +1,28 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 )
 
 func main() {
-	if len(os.Args) < 5 {
-		log.Fatalf("Usage: %s <host:port> <username> <password> <remoteDir>", os.Args[0])
+
+	username := flag.String("username", "", "FTP username")
+	password := flag.String("password", "", "FTP password")
+	remoteDir := flag.String("remoteDir", "./", "Remote directory to download")
+	localDir := flag.String("localDir", ".", "Local directory to save files")
+
+	flag.Parse()
+
+	args := flag.Args()
+	if len(args) < 1 {
+		log.Fatalf("Usage: %s <host:port> [--username] [--password] [--remoteDir] [--localDir]", os.Args[0])
 	}
 
-	host := os.Args[1]
-	username := os.Args[2]
-	password := os.Args[3]
-	remoteDir := os.Args[4]
-	localDir := "."
+	host := args[0]
 
-	err := DownloadFTPDirectory(host, username, password, remoteDir, localDir)
+	err := DownloadFTPDirectory(host, *username, *password, *remoteDir, *localDir)
 	if err != nil {
 		log.Fatalf("Error downloading FTP directory: %v", err)
 	}
