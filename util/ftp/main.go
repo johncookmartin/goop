@@ -17,7 +17,7 @@ func main() {
 
 	args := flag.Args()
 	if len(args) < 1 {
-		log.Fatalf("Usage: %s <host:port> [--username] [--password] [--remoteDir] [--localDir]", os.Args[0])
+		log.Fatalf("Usage: %s [--username] [--password] [--remoteDir] [--localDir] <host:port>", os.Args[0])
 	}
 
 	host := args[0]
