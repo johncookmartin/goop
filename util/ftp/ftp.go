@@ -50,6 +50,8 @@ func downloadDir(conn *ftp.ServerConn, remoteDir, localDir string) error {
 			if err != nil {
 				log.Printf("Error downloading directory %s: %v", remotePath, err)
 			}
+		} else if entry.Type == ftp.EntryTypeLink {
+			log.Printf("Unkown entry type for %s: %s", remotePath, entry.Type)
 		}
 		
 	}
